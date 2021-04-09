@@ -1,5 +1,21 @@
 # Utility feature library for Jenkins Pipelines
 
+## Repository structure
+
+```shell
+├── README.md
+├── com
+│   └── redhat
+│       ├── Util.groovy
+│       └── Version.groovy
+└── example-pipeline
+    └── jenkins-pipeline-homologacao.groovy
+```
+
+- **README.md** - This documentation
+- **com/redhat/*.groovy** - Library`s groovy source code
+- **example-pipeline/jenkins-pipeline-homologacao.groovy**  - An example pipeline using the library
+
 ## Deployment
 
 1. Clone this repository so you can edit it`s content to meet your needs, **THIS REPOSITORY MAY BE CHANGED TO MEET MY PERSONAL NEEDS WITHOUT NOTICE**
