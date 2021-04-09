@@ -4,16 +4,17 @@
 
 ```shell
 ├── README.md
-├── com
-│   └── redhat
-│       ├── Util.groovy
-│       └── Version.groovy
-└── example-pipeline
-    └── jenkins-pipeline-homologacao.groovy
+├── example-pipeline
+│   └── jenkins-pipeline-homologacao.groovy
+└── src
+    └── com
+        └── redhat
+            ├── Util.groovy
+            └── Version.groovy
 ```
 
 - **README.md** - This documentation
-- **com/redhat/*.groovy** - Library`s groovy source code
+- **src/om/redhat/*.groovy** - Library`s groovy source code
 - **example-pipeline/jenkins-pipeline-homologacao.groovy**  - An example pipeline using the library
 
 ## Deployment
