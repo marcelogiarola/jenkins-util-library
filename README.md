@@ -25,7 +25,7 @@
     1. Click on **Add** button
     1. Fill in the field for the new library as follows
         1. *Name* - **util** (all lowercase letters)
-        1. *Default version* - **1.0.0**
+        1. *Default version* - **[a branch or tag]** - for this repository **main**
         1. *Load implicitly* - **Leave unckecked**
         1. *Allow default version to be overidden** - **Leave checked**
         1. *Include @Library changes in job recent change* - **Leave checked**
