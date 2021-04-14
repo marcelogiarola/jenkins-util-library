@@ -77,7 +77,11 @@ def newApp(
 		openshift.withProject(projectName) {
 			def param = parametersToTemplate(appName, projectName, readinessUrl, livenessUrl, envName, version)
 			echo "Parâmetros utilizados para o new-app: ${param}"
-			openshift.newApp("--template=${appTemplateName}", param)				
+			if ("".equals(appTemplateName) {
+				openshift.newApp("--image-stream=${appName}", param)
+			} else {
+				openshift.newApp("--template=${appTemplateName}", param)
+			}				
 		}
 	}
 
