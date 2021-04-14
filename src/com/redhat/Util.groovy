@@ -15,13 +15,7 @@ def init(){
 	echo "Pipeline Version: ${Version.PIPELINE_VERSION}"
 }
 
-def createBuild(
-	String projectName
-	, String buildName
-	, String appImageStream
-	, String appBinaryBuildPath
-	, Boolean isFromFile)
-{
+def createBuild(String projectName, String buildName, String appImageStream, String appBinaryBuildPath, Boolean isFromFile){
 	if (isDebugEnabled)
 		echo "START createBuild"
 
@@ -36,12 +30,7 @@ def createBuild(
 		echo "FINISH createBuild"
 }
 
-def buildApp(
-	String projectName
-	, String buildName
-	, String appBinaryBuildPath
-	, Boolean isFromFile)
-{ 
+def buildApp(String projectName, String buildName, String appBinaryBuildPath, Boolean isFromFile){ 
 	if (isDebugEnabled)
 		echo "START buildApp"
 
@@ -61,15 +50,7 @@ def buildApp(
 		echo "FINISH buildApp"
 }
 
-def newApp(
-	String projectName
-	, String envName
-	, String appName
-	, String appTemplateName
-	, String readinessUrl
-	, String livenessUrl
-	, String version)
-{		
+def newApp(String projectName, String envName, String appName, String appTemplateName, String readinessUrl, String livenessUrl, String version){		
 	if (isDebugEnabled)
 		echo "START newApp"
 	
