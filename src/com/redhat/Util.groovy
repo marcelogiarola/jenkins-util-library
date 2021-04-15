@@ -17,12 +17,12 @@ def init(){
 
 def createBuild(String projectName, String buildName, String appImageStream, String appBinaryBuildPath, Boolean isFromFile){
 	if (isDebugEnabled)
-		echo "START createBuild"
+		echo "START createBuild with parameters projectName: '${projectName}', buildName: '${buildName}', appImageStream: '${appImageStream}', appBinaryBuildPath: '${appBinaryBuildPath}' and isFromFile: ${isFromFile}"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
 			openshift.newBuild("--name=${buildName} --image-stream=${appImageStream} -l app=${buildName}", "--binary=true")
-			buildApp(projectName, buildName, appBinaryBuildPath, isFromFile)
+			internalBuildApp(buildName, appBinaryBuildPath, isFromFile)
 		}
 	}
 
@@ -32,17 +32,11 @@ def createBuild(String projectName, String buildName, String appImageStream, Str
 
 def buildApp(String projectName, String buildName, String appBinaryBuildPath, Boolean isFromFile){ 
 	if (isDebugEnabled)
-		echo "START buildApp"
+		echo "START buildApp with parameters projectName: '${projectName}', buildName: '${buildName}', appBinaryBuildPath: '${appBinaryBuildPath}' and isFromFile: ${isFromFile}"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
-			if(isFromFile){
-				echo "Build started from file."
-				openshift.selector("bc", buildName).startBuild("--from-file=${appBinaryBuildPath}", "--wait=true").logs('-f')
-			} else {
-				echo "Build started from dir."
-				openshift.selector("bc", buildName).startBuild("--from-dir=${appBinaryBuildPath}", "--wait=true").logs('-f')
-			}
+			internalBuildApp(buildName, appBinaryBuildPath, isFromFile)
 		}
 	}
 
@@ -50,9 +44,25 @@ def buildApp(String projectName, String buildName, String appBinaryBuildPath, Bo
 		echo "FINISH buildApp"
 }
 
+private def internalBuildApp(String buildName, String appBinaryBuildPath, Boolean isFromFile){ 
+	if (isDebugEnabled)
+	echo "START internalBuildApp with parameters buildName: '${buildName}', appBinaryBuildPath: '${appBinaryBuildPath}' and isFromFile: ${isFromFile}"
+
+	if(isFromFile){
+		echo "Build started from file."
+		openshift.selector("bc", buildName).startBuild("--from-file=${appBinaryBuildPath}", "--wait=true").logs('-f')
+	} else {
+		echo "Build started from dir."
+		openshift.selector("bc", buildName).startBuild("--from-dir=${appBinaryBuildPath}", "--wait=true").logs('-f')
+	}
+
+	if (isDebugEnabled)
+		echo "FINISH internalBuildApp"
+}
+
 def newApp(String projectName, String envName, String appName, String appTemplateName, String readinessUrl, String livenessUrl, String version){		
 	if (isDebugEnabled)
-		echo "START newApp"
+		echo "START newApp with parameters projectName: '${projectName}', envName: '${envName}', appName: '${appName}', appTemplateName: '${appTemplateName}', readinessUrl: '${readinessUrl}', livenessUrl: '${livenessUrl}' and version: '${version}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
@@ -88,7 +98,7 @@ private def parametersToTemplate(String appName, String projectName, String read
 
 def verifyDeployment(String projectName, String appName) { 
 	if (isDebugEnabled)
-		echo "START verifyDeployment"
+		echo "START verifyDeployment with parameters projectName: '${projectName}' and appName: '${appName}'"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
@@ -114,7 +124,7 @@ private def waitForDeploy(Object dc){
 
 def defineEnvVariables(String projectName, String appName, Map envvars){
 	if (isDebugEnabled)
-		echo "START defineEnvVariables"
+		echo "START defineEnvVariables with parameters projectName: '${projectName}', appName: '${appName}' and envvars: '${envvars}'"
 	
 	if (!envvars.isEmpty()){
 		openshift.withCluster() {
@@ -135,7 +145,7 @@ def defineEnvVariables(String projectName, String appName, Map envvars){
 
 def addSecretAsEnvvar(String projectName, String appName, String secretName){
 	if (isDebugEnabled)
-		echo "START addSecretAsEnvvar"
+		echo "START addSecretAsEnvvar with parameters projectName: '${projectName}', appName: '${appName}' and secretName: '${secretName}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -149,7 +159,7 @@ def addSecretAsEnvvar(String projectName, String appName, String secretName){
 
 def addConfigMapAsEnvvar(String projectName, String appName, String configmapName){
 	if (isDebugEnabled)
-		echo "START addConfigMapAsEnvvar"
+		echo "START addConfigMapAsEnvvar with parameters projectName: '${projectName}', appName: '${appName}' and configmapName: '${configmapName}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -173,7 +183,7 @@ def stringToMap(String mapAsString){
 
 def createOrReplace(String projectName, String resourceType, String resourceName, String filePath){
 	if (isDebugEnabled)
-		echo "START createOrReplace"
+		echo "START createOrReplace with parameters projectName: '${projectName}', resourceType: '${resourceType}', resourceName: '${resourceName}' and filePath: '${filePath}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -191,7 +201,7 @@ def createOrReplace(String projectName, String resourceType, String resourceName
 
 def changeTriggersToManualMode(String projectName, String appName){
 	if (isDebugEnabled)
-		echo "START changeTriggersToManualMode"
+		echo "START changeTriggersToManualMode with parameters projectName: '${projectName}' and appName: '${appName}'"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -205,7 +215,7 @@ def changeTriggersToManualMode(String projectName, String appName){
 
 def changeTriggersToAutomaticMode(String projectName, String appName){
 	if (isDebugEnabled)
-		echo "START changeTriggersToAutomaticMode"
+		echo "START changeTriggersToAutomaticMode with parameters projectName: '${projectName}' and appName: '${appName}'"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -219,7 +229,7 @@ def changeTriggersToAutomaticMode(String projectName, String appName){
 
 def removeAllEnvvars(String projectName, String appName){
 	if (isDebugEnabled)
-		echo "START removeAllEnvvars"
+		echo "START removeAllEnvvars with parameters projectName: '${projectName}' and appName: '${appName}'"
 
 	openshift.withCluster() {
 		openshift.withProject(projectName){
@@ -242,7 +252,7 @@ def removeAllEnvvars(String projectName, String appName){
 
 def createAndProcess(String projectName, String templateName, List parameters){
 	if (isDebugEnabled)
-		echo "START createAndProcess"
+		echo "START createAndProcess with parameters projectName: '${projectName}', templateName: '${templateName}' and parameters: '${parameters}'"
 
 	def parametersAsString = ""
 	for(String parameter : parameters){
