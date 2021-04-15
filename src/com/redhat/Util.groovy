@@ -62,7 +62,7 @@ private def internalBuildApp(String buildName, String appBinaryBuildPath, Boolea
 
 def newApp(String projectName, String envName, String appName, String appTemplateName, String readinessUrl, String livenessUrl, String version, String hostNameDomain){		
 	if (isDebugEnabled)
-		echo "START newApp with parameters projectName: '${projectName}', envName: '${envName}', appName: '${appName}', appTemplateName: '${appTemplateName}', readinessUrl: '${readinessUrl}', livenessUrl: '${livenessUrl}' and version: '${version}'"
+		echo "START newApp with parameters projectName: '${projectName}', envName: '${envName}', appName: '${appName}', appTemplateName: '${appTemplateName}', readinessUrl: '${readinessUrl}', livenessUrl: '${livenessUrl}', version: '${version}' and hostNameDomain: '${hostNameDomain}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
