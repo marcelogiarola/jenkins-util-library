@@ -60,13 +60,13 @@ private def internalBuildApp(String buildName, String appBinaryBuildPath, Boolea
 		echo "FINISH internalBuildApp"
 }
 
-def newApp(String projectName, String envName, String appName, String appTemplateName, String readinessUrl, String livenessUrl, String version){		
+def newApp(String projectName, String envName, String appName, String appTemplateName, String readinessUrl, String livenessUrl, String version, String hostNameDomain){		
 	if (isDebugEnabled)
 		echo "START newApp with parameters projectName: '${projectName}', envName: '${envName}', appName: '${appName}', appTemplateName: '${appTemplateName}', readinessUrl: '${readinessUrl}', livenessUrl: '${livenessUrl}' and version: '${version}'"
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
-			def param = parametersToTemplate(appName, projectName, readinessUrl, livenessUrl, envName, version)
+			def param = parametersToTemplate(appName, projectName, readinessUrl, livenessUrl, envName, version, hostNameDomain)
 			echo "Parâmetros utilizados para o new-app: ${param}"
 			if ("".equals(appTemplateName)) {
 				openshift.newApp("--image-stream=${appName}", param)
@@ -80,7 +80,7 @@ def newApp(String projectName, String envName, String appName, String appTemplat
 		echo "FINISH newApp"
 }
 
-private def parametersToTemplate(String appName, String projectName, String readinessUrl, String livenessUrl, String envName, String version){
+private def parametersToTemplate(String appName, String projectName, String readinessUrl, String livenessUrl, String envName, String version, String hostNameDomain){
 	def parameters = "-p=APP_NAME=${appName}"
 					.concat(" -p=IMAGE_TAG=${version}")
 					.concat(" -p=PROJECT_NAME=${projectName}")
@@ -88,9 +88,9 @@ private def parametersToTemplate(String appName, String projectName, String read
 					.concat(" -p=LIVENESS_URL=${livenessUrl}")
 
 	if (envName == "prod"){
-		parameters = parameters.concat(" -p=HOSTNAME=${appName}.paas.celepar.parana")
+		parameters = parameters.concat(" -p=HOSTNAME=${appName}.${hostNameDomain}")
 	} else {
-		parameters = parameters.concat(" -p=HOSTNAME=${appName}-${envName}.paas.celepar.parana")
+		parameters = parameters.concat(" -p=HOSTNAME=${appName}-${envName}.${hostNameDomain}")
 	}
 
 	return parameters
