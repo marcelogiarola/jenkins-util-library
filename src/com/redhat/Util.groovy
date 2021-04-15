@@ -105,6 +105,7 @@ def verifyDeployment(String projectName, String appName) {
 		openshift.withProject(projectName) {
 			timeout(10) {
 				def dc = openshift.selector('dc', "${appName}")
+				dc.rollout().latest()
 				dc.related('pods').untilEach(1) {
 					return (it.object().status.phase == "Running")
 				}
