@@ -16,8 +16,7 @@ def init(){
 }
 
 def createBuild(String projectName, String buildName, String appImageStream, String appBinaryBuildPath, Boolean isFromFile){
-	echo "Executando util.createBuild(${projectName}, ${buildName}, ${appImageStream}, ${appBinaryBuildPath}, ${isFromFile})"
-	/*if (isDebugEnabled)
+	if (isDebugEnabled)
 		echo "START createBuild"
 
 	openshift.withCluster() {
@@ -28,7 +27,7 @@ def createBuild(String projectName, String buildName, String appImageStream, Str
 	}
 
 	if (isDebugEnabled)
-		echo "FINISH createBuild"*/
+		echo "FINISH createBuild"
 }
 
 def buildApp(String projectName, String buildName, String appBinaryBuildPath, Boolean isFromFile){ 
