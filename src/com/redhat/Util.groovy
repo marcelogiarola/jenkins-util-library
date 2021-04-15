@@ -86,6 +86,7 @@ private def parametersToTemplate(String appName, String projectName, String read
 					.concat(" -p=PROJECT_NAME=${projectName}")
 					.concat(" -p=READINESS_URL=${readinessUrl}")
 					.concat(" -p=LIVENESS_URL=${livenessUrl}")
+					.concat(" --as-deployment-config=true")
 
 	if (envName == "prod"){
 		parameters = parameters.concat(" -p=HOSTNAME=${appName}.${hostNameDomain}")
