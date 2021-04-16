@@ -179,7 +179,7 @@ def stringToMap(String mapAsString){
 	        }
 }
 
-def createOrReplace(String projectName, String resourceType, String resourceName, String filePath){
+def createOrReplace(String projectName, String resourceType, String resourceName, String filePath, String appName){
 	if (isDebugEnabled)
 		echo "START createOrReplace with parameters projectName: '${projectName}', resourceType: '${resourceType}', resourceName: '${resourceName}' and filePath: '${filePath}'"
 	
@@ -187,8 +187,10 @@ def createOrReplace(String projectName, String resourceType, String resourceName
 		openshift.withProject(projectName){
 			if(openshift.selector(resourceType, resourceName).exists()){
 				openshift.replace('-f', filePath)
+				openshift.label('-f', filePath, "app=${appName}")
 			} else {
 				openshift.create('-f', filePath)
+				openshift.label('-f', filePath, "app=${appName}")
 			}
 		}
 	}
