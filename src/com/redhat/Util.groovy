@@ -188,10 +188,10 @@ def createOrReplace(String projectName, String resourceType, String resourceName
 			applyLabel = "${resourceType} ${resourceName} app=${appName}"
 			if(openshift.selector(resourceType, resourceName).exists()){
 				openshift.replace('-f', filePath)
-				openshift.raw('label', applayLabel)
+				openshift.raw('label', applyLabel)
 			} else {
 				openshift.create('-f', filePath)
-				openshift.raw('label', applayLabel)
+				openshift.raw('label', applyLabel)
 			}
 		}
 	}
