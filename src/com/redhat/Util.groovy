@@ -66,7 +66,7 @@ def newApp(String projectName, String envName, String appName, String appTemplat
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
-			def param = parametersToTemplate(appName, projectName, readinessUrl, livenessUrl, envName, version, hostNameDomain)
+			def param = parametersToTemplate(appName, readinessUrl, livenessUrl, envName, version, hostNameDomain)
 			echo "Parâmetros utilizados para o new-app: ${param}"
 			if ("".equals(appTemplateName)) {
 				openshift.newApp("--image-stream=${appName}", param)
@@ -80,18 +80,17 @@ def newApp(String projectName, String envName, String appName, String appTemplat
 		echo "FINISH newApp"
 }
 
-private def parametersToTemplate(String appName, String projectName, String readinessUrl, String livenessUrl, String envName, String version, String hostNameDomain){
-	def parameters = "-p=APP_NAME=${appName}"
+private def parametersToTemplate(String appName, String readinessUrl, String livenessUrl, String envName, String version, String hostNameDomain){
+	def parameters = "-p=APPLICATION_NAME=${appName}"
 					.concat(" -p=IMAGE_TAG=${version}")
-					.concat(" -p=PROJECT_NAME=${projectName}")
-					.concat(" -p=READINESS_URL=${readinessUrl}")
-					.concat(" -p=LIVENESS_URL=${livenessUrl}")
+					.concat(" -p=READINESS_PROBE=${readinessUrl}")
+					.concat(" -p=LIVENESS_PROBE=${livenessUrl}")
 					.concat(" --as-deployment-config=true")
 
 	if (envName == "prod"){
-		parameters = parameters.concat(" -p=HOSTNAME=${appName}.${hostNameDomain}")
+		parameters = parameters.concat(" -p=APPLICATION_HOSTNAME=${appName}.${hostNameDomain}")
 	} else {
-		parameters = parameters.concat(" -p=HOSTNAME=${appName}-${envName}.${hostNameDomain}")
+		parameters = parameters.concat(" -p=APPLICATION_HOSTNAME=${appName}-${envName}.${hostNameDomain}")
 	}
 
 	return parameters
@@ -105,7 +104,7 @@ def verifyDeployment(String projectName, String appName) {
 		openshift.withProject(projectName) {
 			timeout(10) {
 				def dc = openshift.selector('dc', "${appName}")
-				dc.rollout().latest()
+				// dc.rollout().latest()
 				dc.related('pods').untilEach(1) {
 					return (it.object().status.phase == "Running")
 				}
