@@ -185,10 +185,13 @@ def createOrReplace(String projectName, String resourceType, String resourceName
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName){
+			applyLabel = "${resourceType} ${resourceName} app=${appName}"
 			if(openshift.selector(resourceType, resourceName).exists()){
-				openshift.replace("-f ${filePath}", "-lapp=${appName}")
+				openshift.replace('-f', filePath)
+				openshift.raw('label', applayLabel)
 			} else {
-				openshift.create("-f ${filePath}", "-lapp=${appName}")
+				openshift.create('-f', filePath)
+				openshift.raw('label', applayLabel)
 			}
 		}
 	}
