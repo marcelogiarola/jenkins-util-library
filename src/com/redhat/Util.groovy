@@ -66,7 +66,7 @@ def newApp(String projectName, String envName, String appName, String appTemplat
 	
 	openshift.withCluster() {
 		openshift.withProject(projectName) {
-			def param = parametersToTemplate(appName, readinessUrl, livenessUrl, envName, version, hostNameDomain)
+			def param = parametersToTemplate(appName, readinessUrl, livenessUrl, envName, hostNameDomain)
 			echo "Parâmetros utilizados para o new-app: ${param}"
 			if ("".equals(appTemplateName)) {
 				openshift.newApp("--image-stream=${appName}", param)
@@ -80,9 +80,8 @@ def newApp(String projectName, String envName, String appName, String appTemplat
 		echo "FINISH newApp"
 }
 
-private def parametersToTemplate(String appName, String readinessUrl, String livenessUrl, String envName, String version, String hostNameDomain){
+private def parametersToTemplate(String appName, String readinessUrl, String livenessUrl, String envName, String hostNameDomain){
 	def parameters = "-p=APPLICATION_NAME=${appName}"
-					.concat(" -p=IMAGE_TAG=${version}")
 					.concat(" -p=READINESS_PROBE=${readinessUrl}")
 					.concat(" -p=LIVENESS_PROBE=${livenessUrl}")
 					.concat(" --as-deployment-config=true")
